@@ -95,11 +95,15 @@ class Logistic(): # Defines a logistic regression problem (with ridge parameter 
         D2 = np.array(D2)
         return D2
 
-    def get_rand_nys_appx(self, indices, rank):
+    def get_rand_nys_appx(self, indices, rank, last_U):
         n = indices.shape[0]
         D2 = self.get_hessian_diag(indices)
-        Omega = np.random.randn(self.p, rank)
-        Omega = la.qr(Omega, mode='economic')[0]
+
+        if last_U is None:
+            Omega = np.random.randn(self.p, rank)
+            Omega = la.qr(Omega, mode='economic')[0]
+        else:
+            Omega = last_U
 
         if self.fit_intercept:
             if sp.sparse.issparse(self.Atr):

@@ -24,7 +24,7 @@ class SketchySGD():
         # Update the preconditioner at the appropriate frequency
         if self.n_iters % self.update_freq['precond'] == 0:
                 h_indices = np.random.choice(self.model.ntr, self.bh, replace = False)
-                self.U, self.S = self.model.get_rand_nys_appx(h_indices, self.rank)
+                self.U, self.S = self.model.get_rand_nys_appx(h_indices, self.rank, None)
 
                 lin_op = get_lin_op(self.model.get_hessian_diag(h_indices), 
                     self.model.Atr[h_indices, :], 
@@ -46,4 +46,3 @@ class SketchySGD():
             vns = appx_newton_step(self.U, self.S, self.rho, g)
         self.model.w -= self.eta * vns
         self.n_iters += 1
-            
